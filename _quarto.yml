@@ -30,7 +30,7 @@ format:
     toc-location: body
     toc-title: "Chapter Contents"
     number-sections: false
-    css: style.css
-    include-in-header: shared-header.html
-    include-after-body: shared-scripts.html
+    css: _assets/style.css
+    include-in-header: _assets/shared-header.html
+    include-after-body: _assets/shared-scripts.html
 
