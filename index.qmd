@@ -1,0 +1,7 @@
+---
+toc: false
+---
+
+# Course Overview {.unnumbered}
+
+Welcome to the interactive **S6M5 Mathematics** lecture notes. Use the sidebar on the left to navigate across **Algebra & Analysis**, **Geometry**, and **Stochastics**, or use the search bar to find any definition, theorem, or exercise.

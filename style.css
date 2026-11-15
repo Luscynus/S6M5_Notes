@@ -1,0 +1,1163 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   📂 PART 1: GLOBAL DASHBOARD SHELL & SNAKE PROGRESSION TRAIL MATRIX
+   ───────────────────────────────────────────────────────────────────────────── */
+:root {
+    --bg-deep: #090d16;
+    --bg-surface: #0f172a;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --neon-blue: #3b82f6;
+    --neon-cyan: #06b6d4;
+    --neon-green: #10b981;
+    --neon-amber: #f59e0b;
+    --neon-danger: #ef4444;
+    --border-glow: #1e293b;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    color: var(--text-main);
+    margin: 0;
+    padding: 15px;
+    background-color: #090d16 !important; /* Solid dark theme nesting background */
+    
+    /* 🚨 SCROLL ALLOWANCE ENGINE: Tells the browser this document can expand down */
+    height: auto !important;
+    overflow-y: auto !important;
+    overflow-x: hidden;
+}
+
+
+/* 🎴 CORE TWO-COLUMN EXPEDITION DASHBOARD LAYOUT */
+.app-container {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+/* 📡 LEFT NAVIGATION SIDEBAR NODE CORE */
+.sidebar {
+    background-color: #0d1321;
+    border-right: 1px solid var(--border-glow);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.4);
+    height: 100vh;
+    box-sizing: border-box;
+    overflow: hidden; /* Header and stats remain securely fixed at the top */
+}
+
+/* 🚨 FORCED SCROLL Viewport Layer - Resolves Layout Collisions */
+.map-scroll-viewport {
+    flex: 1;
+    overflow-y: auto !important; /* Locks local scroll calculations here */
+    overflow-x: hidden;
+    padding-right: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-glow) transparent;
+}
+
+/* Viewport Scroll Track Aesthetics */
+.map-scroll-viewport::-webkit-scrollbar { width: 6px; }
+.map-scroll-viewport::-webkit-scrollbar-track { background: transparent; }
+.map-scroll-viewport::-webkit-scrollbar-thumb { background: var(--border-glow); border-radius: 4px; }
+.map-scroll-viewport::-webkit-scrollbar-thumb:hover { background: var(--neon-blue); }
+
+.header-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border-glow);
+    padding-bottom: 12px;
+    color: var(--text-main);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+/* Stats Widget Lane */
+.stats-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-glow);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+.stats-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+.stats-row:last-child { margin-bottom: 0; }
+/* 🎴 HARMONIZED STATS BOX LABEL THEME */
+.stats-label {
+    color: #bfa38a; /* 🟢 Switches from cold gray to your beautiful warm parchment-gold! */
+    font-size: 0.85rem;
+    opacity: 0.85; /* Softens the label text slightly so the values look brighter */
+    font-weight: 500;
+}
+
+/* ⚡ KEEP THE DYNAMIC VALUES POPPING IN NEON CYAN */
+.stats-value {
+    color: var(--neon-cyan, #06b6d4);
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+
+/* 🗺️ THE SNAKE MAP ROADWAY TRACK CONTAINER */
+#vertical-map-track {
+    display: flex;
+    flex-direction: column;
+    gap: 35px; /* Vertical gap distance between your layout rows */
+    padding: 20px 10px;
+    max-width: 500px;
+    margin: 0 auto;
+    position: relative;
+    overflow-y: visible;
+}
+
+/* Individual grid lane rows hosting horizontal nodes side-by-side */
+.map-track-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
+/* 🔄 SNAKE FLIP ENGINE: Reverses structural flex directions on alternate rows automatically 
+.map-track-row:nth-child(even) {
+    flex-direction: row-reverse;
+}*/
+
+/* 🔄 SNAKE FLIP ENGINE: Reverses structural flex directions on alternate rows automatically 
+.map-track-row:nth-child(even) {
+    flex-direction: row-reverse;
+}*/
+
+/* Ensure node layout frames stay cleanly centered */
+.map-node {
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    background: #1e293b;
+    border: 2px solid var(--border-glow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    transition: all 0.3s;
+    color: var(--text-muted);
+}
+
+
+/* The item wrapper frame hosting the dot bubble and labels */
+.map-node-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.map-node-container.active .map-node {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 12px var(--neon-cyan);
+    color: var(--text-main);
+}
+
+.map-node-container.completed .map-node {
+    border-color: var(--neon-green);
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--neon-green);
+}
+
+
+.node-label { 
+    font-size: 0.75rem; 
+    font-weight: 600; 
+    text-align: center; 
+    margin-top: 6px;
+    color: var(--text-main);
+}
+
+/* 🔄 VERTICAL LANE DROP CONNECTOR TRACKS */
+.path-drop-elbow {
+    width: 100%;
+    height: 35px; /* Matches exact gap spacing between rows */
+    position: relative;
+    z-index: 1;
+}
+
+.path-drop-elbow::after {
+    content: '';
+    position: absolute;
+    width: 50%;
+    height: 35px;
+    border: 2px dashed #1e293b;
+}
+
+.path-drop-elbow.align-right::after {
+    right: 45px;
+    border-left: none;
+    border-top: none;
+    border-bottom: none;
+}
+
+.path-drop-elbow.align-left::after {
+    left: 45px;
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+}
+
+/* 🖥️ RIGHT CONTENT ACTIVE VIEWPORT PANEL */
+.content-pane {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: var(--bg-deep);
+    overflow: hidden; /* Prevents the outer dashboard from breaking layout bounds */
+}
+
+#viewport-root {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    box-sizing: border-box;
+    height: 100%;
+    overflow: hidden; /* Clears double scrollbar issues on the parent box frame */
+}
+
+.content-iframe {
+    width: 100%;
+    height: 100%; /* Spans the full height of the viewport root cleanly */
+    border: 1px solid var(--border-glow);
+    border-radius: 12px;
+    background: #111827;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    
+    /* 🚨 FORCES THE IFRAME SCROLL MECHANIC TO ENGAGE NATIVELY */
+    overflow-y: auto !important;
+}
+
+
+
+.btn-reset { 
+    background: transparent; 
+    border: 1px solid #334155; 
+    
+    /* 🎨 DEFAULT STATE: A soft, muted parchment-gold that matches the scroll icon color */
+    color: #bfa38a; 
+    
+    font-size: 0.7rem; 
+    padding: 4px 10px; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    font-weight: bold; 
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+}
+
+/* ⚡ HOVER STATE: Explodes into your vibrant neon amber! */
+.btn-reset:hover {
+    color: var(--neon-amber, #f59e0b); 
+    border-color: rgba(245, 158, 11, 0.4);
+    background-color: rgba(245, 158, 11, 0.08);
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.15); /* Adds a premium micro-glow on hover */
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   📂 PART 2: INTERACTIVE SLIDE LESSON COMPONENT ARCHITECTURE SYSTEM
+   ───────────────────────────────────────────────────────────────────────────── */
+:root {
+    --bg-surface: #0f172a;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --neon-blue: #3b82f6;
+    --neon-cyan: #06b6d4;
+    --neon-green: #10b981;
+    --neon-amber: #f59e0b;
+    --neon-pink: #f43f5e;
+    --neon-danger: #ef4444;
+    --neon-purple: #a855f7;
+    --border-glow: #1e293b;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    color: var(--text-main);
+    margin: 0;
+    padding: 15px;
+    background-color: #090d16 !important; /* Forces solid dark nesting theme background inside the frame view */
+}
+
+h2 { 
+    color: var(--text-main); 
+    border-bottom: 1px solid var(--border-glow); 
+    padding-bottom: 8px; 
+    margin-top: 0; 
+}
+
+h3 { 
+    color: var(--neon-blue); 
+    margin-top: 0px; 
+    font-size: 1.25rem; 
+}
+
+p { 
+    text-align: justify; 
+    margin: 12px 0; 
+    color: var(--text-muted);
+}
+
+ol, ul { 
+    margin: 10px 0; 
+    padding-left: 20px; 
+}
+
+li { 
+    margin-bottom: 8px; 
+    color: var(--text-muted);
+}
+
+strong {
+    color: var(--text-main);
+}
+
+/* 📑 STICKY SLIDE DECK NAVIGATION TABS */
+.tab-nav { 
+    display: flex; 
+    gap: 8px; 
+    position: sticky;
+    top: 0;
+    background-color: #090d16;
+    padding: 10px 0 15px 0;
+    margin-top: -10px;
+    margin-bottom: 20px;
+    z-index: 100;
+    border-bottom: 1px solid var(--border-glow);
+}
+
+.tab-btn {
+    background: #1e293b; 
+    color: var(--text-muted); 
+    border: 1px solid var(--border-glow);
+    padding: 8px 16px; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    font-weight: 600; 
+    font-size: 0.85rem; 
+    transition: all 0.2s;
+}
+
+.tab-btn:hover {
+    background: #334155;
+    color: #f8fafc;
+}
+
+.tab-btn.active { 
+    background: var(--neon-blue); 
+    color: #090d16; 
+    border-color: var(--neon-blue); 
+    box-shadow: 0 0 10px rgba(59,130,246,0.4); 
+}
+
+/* 🔑 SPECIAL MILESTONE ACCENT BUTTON RULES */
+.tab-btn.milestone-tab { 
+    background: transparent; 
+    border: 1px solid var(--neon-amber); 
+    color: var(--neon-amber); 
+}
+
+.tab-btn.milestone-tab:hover { 
+    background: rgba(245, 158, 11, 0.1); 
+}
+
+.tab-btn.milestone-tab.active { 
+    background: var(--neon-amber); 
+    color: #090d16; 
+    border-color: var(--neon-amber); 
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); 
+}
+
+/* 🎴 LAYOUT SLIDE CONTENT BOX CONTAINERS */
+.slide-content { 
+    display: none; 
+    background: #111827; 
+    border: 1px solid var(--border-glow); 
+    padding: 20px; 
+    border-radius: 12px; 
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.4); 
+}
+
+.slide-content.active { 
+    display: block; 
+}
+
+.split-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px; 
+}
+
+@media(max-width: 768px) { 
+    .split-grid { grid-template-columns: 1fr; } 
+}
+
+.box { 
+    background-color: #1e293b; 
+    border: 1px solid #334155; 
+    border-radius: 8px; 
+    padding: 15px; 
+    margin: 15px 0; 
+    color: var(--text-main); 
+}
+
+/* ==========================================================================
+   📘 CYAN MODE: SHOWCASE / GUIDED EXAMPLES
+   ========================================================================== */
+.block-example { 
+    /* Deep neutralized navy-charcoal matching the dashboard canvas */
+    background-color: #0b132b !important; 
+    border-left: 4px solid var(--neon-cyan); 
+    padding: 20px; 
+    border-radius: 4px; 
+    margin: 20px 0; 
+    color: var(--text-main); 
+}
+
+.block-example strong {
+    color: #06b6d4;
+}
+
+/* 📝 Unified Child Element: Instruction Sub-Text Description */
+.block-example p {
+    font-size: 0.85rem !important;
+    margin-top: 4px !important;
+    margin-bottom: 0 !important;
+    color: var(--text-muted) !important;
+    line-height: 1.4 !important;
+}
+
+/* ==========================================================================
+   🟩 SOLUTION CONTENT BLOCKS (Nested Step Containers)
+   ========================================================================== */
+.block-solution {
+    background-color: rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--border-glow);
+    border-radius: 6px;
+    padding: 14px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 12px;
+}
+
+/* Typography alignment resets for solution steps inside the block */
+.block-solution ol {
+    margin: 0;
+    padding-left: 20px;
+    line-height: 1.6;
+    color: var(--text-muted);
+}
+
+.block-solution li {
+    margin-top: 8px;
+}
+
+/* Ensure step headers inherit primary text contrast colors */
+.block-solution li span {
+    color: var(--text-main);
+}
+
+
+/* ==========================================================================
+   📊 UNIVERSAL GRAPHICS CARD WRAPPER (STANDALONE & GLOBAL)
+   ========================================================================== */
+.visual-wrapper {
+    margin-top: 20px; 
+    margin-bottom: 20px;
+    background-color: #111a36 !important;   /* Beautiful floating surface layer color */
+    border: 1px solid rgba(255, 255, 255, 0.08) !important; /* Muted structural outer border line */
+    padding: 18px; 
+    border-radius: 8px; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+/* 🎨 OPTIONAL CONTEXT-AWARE RIM GLOWS */
+.block-example .visual-wrapper {
+    border-color: rgba(0, 243, 255, 0.2) !important; /* Low-opacity cyan glow inside examples */
+}
+
+.block-definition .visual-wrapper {
+    border-color: rgba(16, 185, 129, 0.2) !important; /* Low-opacity emerald glow inside definitions */
+}
+
+/* If a visual graphic sits inside a Neon Amber Exercise block */
+.block-exercise .visual-wrapper {
+    border-color: rgba(245, 158, 11, 0.22) !important;
+}
+
+/* If a visual graphic sits inside a Neon Pink Theorem block */
+.block-theorem .visual-wrapper {
+    border-color: rgba(59, 130, 246, 0.22) !important;
+}
+
+/* Match \mathbf{...} color to **bold** text across all blocks */
+.math-bold,
+.math-bold * {
+  color: var(--text-main) !important;
+}
+
+.block-definition .math-bold,
+.block-definition .math-bold * {
+  color: var(--neon-green) !important;
+}
+
+.block-theorem .math-bold,
+.block-theorem .math-bold * {
+  color: var(--neon-blue) !important;
+}
+
+.block-example .math-bold,
+.block-example .math-bold * {
+  color: var(--neon-cyan) !important;
+}
+
+.block-exercise .math-bold,
+.block-exercise .math-bold * {
+  color: var(--neon-amber) !important;
+}
+
+
+
+/* ==========================================================================
+   📊 GRAPHICS MASK ENGINE (GLOBAL FALLBACK ENHANCEMENT)
+   ========================================================================== */
+.visual-wrapper svg circle[fill="#090d16"] {
+    fill: #111a36 !important; /* Seamless backfield blending anywhere on the dashboard */
+}
+
+
+/* ==========================================================================
+   🚀 6. CALCULUS PREVIEWS / ADVANCED INSIGHTS (Electric Purple)
+   ========================================================================== */
+.block-preview {
+    background-color: rgba(168, 85, 247, 0.05) !important; /* Premium translucent purple fill */
+    border-left: 4px solid #a855f7; 
+    padding: 15px;
+    border-radius: 4px;
+    margin: 20px 0;
+    color: var(--text-main);
+}
+
+.block-preview strong {
+    color: #a855f7;
+    letter-spacing: 0.5px;
+}
+
+.block-preview p {
+    font-size: 0.85rem !important;
+    margin-top: 6px !important;
+    margin-bottom: 0 !important;
+    color: var(--text-main) !important;
+    line-height: 1.4 !important;
+}
+
+.block-preview ul {
+    margin: 8px 0 0 0; 
+    padding-left: 20px; 
+    font-size: 0.85rem; 
+    line-height: 1.5;
+}
+
+.block-preview li {
+    color: var(--text-muted);
+}
+
+
+
+
+/* 🧮 INTERACTIVE MATH ENGRAVED TEXT FORMATS */
+.math-inline { 
+    font-family: "Times New Roman", Times, serif; 
+    font-style: italic; 
+    color: #ffffff; 
+    font-size: 1.15rem; 
+    white-space: nowrap; 
+}
+
+.math-block { 
+    display: block; 
+    text-align: center; 
+    margin: 15px 0; 
+    font-family: "Times New Roman", Times, serif; 
+    font-style: italic; 
+    color: #ffffff; 
+    font-size: 1.25rem; 
+}
+
+.frac { 
+    display: inline-flex; 
+    flex-direction: column; 
+    vertical-align: middle; 
+    text-align: center; 
+    padding: 0 4px; 
+    font-style: italic; 
+}
+
+.frac .top { 
+    border-bottom: 1px solid #ffffff; 
+    padding-bottom: 2px; 
+    line-height: 1; 
+}
+
+.frac .bottom { 
+    padding-top: 2px; 
+    line-height: 1; 
+}
+
+/* ==========================================================================
+   🟨 PRACTICE LAB & WRITTEN WORKBOOK EXERCISE CARDS
+   ========================================================================== */
+.block-exercise { 
+    background-color: #0b132b !important; 
+    border-left: 4px solid var(--neon-amber); 
+    padding: 15px; 
+    border-radius: 4px; 
+    margin-bottom: 20px;
+    color: var(--text-main); 
+}
+
+.block-exercise .exercise-title { 
+    color: var(--neon-amber) !important;      
+    font-weight: 700; 
+    margin-bottom: 12px; 
+}
+
+.block-exercise p {
+    font-size: 0.85rem !important;
+    margin-top: 0 !important;
+    margin-bottom: 14px !important;
+    color: var(--text-muted) !important;
+    line-height: 1.4 !important;
+}
+
+/* 🧮 1. GLOBAL WORKBOOK CARD CONTAINER (Works flawlessly anywhere) */
+.exercise-item { 
+    background-color: #111a36 !important; 
+    border: 1px solid rgba(255, 255, 255, 0.05) !important; 
+    padding: 12px 14px !important; 
+    border-radius: 6px; 
+    color: var(--text-main); 
+    box-sizing: border-box !important; /* ⚡ STOPS EXPANSION OVERFLOWS */
+    
+    display: flex; 
+    flex-direction: row;
+    align-items: center; 
+    justify-content: flex-start;
+    gap: 8px;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+/* ✨ Interactive Hover Polish */
+.exercise-item:hover {
+    border-color: var(--neon-amber) !important;
+    background-color: rgba(255, 159, 67, 0.04) !important; 
+    transform: translateY(-1px);
+}
+
+/* 🥞 2. AUTOMATED MULTI-STEP STACK ENGINE */
+.layout-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* When an item lives inside a stack, reshape it cleanly to read vertically */
+.layout-stack .exercise-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    gap: 4px;
+}
+
+/* 📋 Clean Sub-Detail Hint Strings inside Stacks */
+.block-exercise .exercise-item .item-detail {
+    display: block;
+    font-size: 0.8rem !important;
+    color: var(--text-muted) !important;
+    margin-top: 4px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+
+/* 🌐 GLOBAL CARD GRID CONTAINER */
+.grid-2 { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+    gap: 12px; 
+    width: 100%;
+}
+
+.grid-2 > ol,
+.grid-2 > ul {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 1.1rem 3.5rem;
+  padding-left: 1.5rem;
+  margin: 0.5rem 0 0 0;
+  /* Vertical divider line down the center (like LaTeX multicols) */
+  background: linear-gradient(to right, transparent calc(50% - 0.5px), #1e293b calc(50% - 0.5px), #1e293b calc(50% + 0.5px), transparent calc(50% + 0.5px));
+}
+
+/* Stack cleanly on small mobile screens */
+@media (max-width: 650px) {
+  .grid-2 > ol,
+  .grid-2 > ul {
+    grid-template-columns: 1fr;
+    background: none;
+  }
+}
+
+
+/* 📐 BALANCED 3-COLUMN ENGINE (Perfect for 3 or 6 items) */
+.grid-3 {
+    display: grid;
+    /* Forces exactly 3 equal columns on desktop, automatically dropping to 2 or 1 columns on smaller viewports */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+    width: 100%;
+}
+
+/* 📐 SYMMETRICAL 2-COLUMN ENGINE (Perfect for pairs or clean 2-column stacks) */
+.grid-4 {
+    display: grid;
+    /* 🔄 Changed to repeat(2, 1fr) for a guaranteed side-by-side split on desktop sheets */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    width: 100%;
+}
+
+/* 📱 Responsive override for smaller viewports (Tablets and Mobiles) */
+@media (max-width: 600px) {
+    .grid-4 {
+        /* Collapses into a single vertical stack so code components don't clip on small phones */
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* 🕹️ CONTROLS & READOUT INTERACTION COMPONENTS */
+.slider-control { 
+    width: 100%; 
+    margin: 10px 0; 
+    accent-color: var(--neon-amber); 
+    cursor: pointer;
+}
+
+.readout-badge { 
+    background: #090d16; 
+    padding: 4px 8px; 
+    border-radius: 4px; 
+    font-family: monospace; 
+    font-size: 0.9rem; 
+    font-weight: bold; 
+}
+
+.btn-action {
+    background: var(--neon-blue); 
+    color: #090d16; 
+    border: none;
+    padding: 10px 20px; 
+    border-radius: 6px; 
+    font-weight: 700; 
+    cursor: pointer; 
+    transition: background 0.2s;
+}
+.btn-action:hover { background: var(--neon-cyan); }
+
+
+/* 🟢 2. CORE DEFINITIONS / VOCABULARY (Emerald Green) */
+.block-definition {
+    background-color: #0b132b !important;
+    border-left: 4px solid #10b981; /* Premium Emerald Green */
+    padding: 15px;
+    border-radius: 4px;
+    margin: 15px 0;
+    color: var(--text-main);
+}
+
+/* Sub-text description wrapper formatting for Definitions (Green) */
+.block-definition p {
+    font-size: 0.85rem !important;
+    margin-top: 4px !important;
+    margin-bottom: 0 !important;
+    color: var(--text-muted) !important;
+    line-height: 1.4 !important;
+}
+
+.block-definition strong {
+    color: #10b981;
+}
+
+
+/* 🟥 4. THEOREMS / CRITICAL FORMULAS (Neon Pink/Crimson) */
+.block-theorem {
+    background-color: #0b132b !important;
+    border-left: 4px solid #3b82f6; /* Vibrant Pink/Crimson */
+    padding: 15px;
+    border-radius: 4px;
+    margin: 15px 0;
+    color: var(--text-main);
+}
+
+/* Sub-text description wrapper formatting for Theorems (Pink) */
+.block-theorem p {
+    font-size: 0.85rem !important;
+    margin-top: 4px !important;
+    margin-bottom: 0 !important;
+    color: var(--text-muted) !important;
+    line-height: 1.4 !important;
+}
+
+.block-theorem strong {
+    color: #3b82f6;
+}
+.block-theorem .inner-card {
+    background-color: #111a36 !important;
+    border: 1px solid rgba(59, 130, 246, 0.22) !important;
+    border-radius: 6px;
+    padding: 12px;
+    margin-top: 12px;
+}
+
+/* 🚨 5. ATTENTION / WARNING / COMMON TRAPS (Vibrant Red) */
+.block-attention {
+    /* Subtle deep-red tint to make it feel dangerous without breaking the blue background theme */
+    background-color: #1a0f12 !important; 
+    border-left: 4px solid #ef4444; /* High-visibility Warning Red */
+    padding: 15px;
+    border-radius: 4px;
+    margin: 15px 0;
+    color: var(--text-main);
+}
+
+/* Sub-text description wrapper formatting for Attention/Warning Blocks (Red) */
+.block-attention p {
+    font-size: 0.85rem !important;
+    margin-top: 4px !important;
+    margin-bottom: 0 !important;
+    color: var(--text-muted) !important;
+    line-height: 1.4 !important;
+}
+
+.block-attention strong {
+    color: #ef4444;
+}
+
+/* Quarto Centered Layout (No Sidebar Clutter) 
+html, body {
+  background-color: #090d16 !important;
+  color: var(--text-main) !important;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}*/
+
+/* Replace the old html, body width rule with this: */
+html, body {
+  background-color: #090d16 !important;
+  color: var(--text-main) !important;
+  margin: 0;
+  padding: 0;
+}
+
+main.content {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.quarto-title h1.title {
+  color: var(--text-main);
+  border-bottom: 1px solid var(--border-glow);
+  padding-bottom: 0.75rem;
+  margin-top: 0;
+}
+
+/* Visual Landmark Divider Before Each Major Part (# Part I, # Part II, etc.) */
+h1:not(.title) {
+  margin-top: 3.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #1e293b;
+  color: var(--text-main);
+}
+
+
+/* Master Table of Contents at Top */
+#TOC {
+  background-color: #0f172a;
+  border: 1px solid #1e293b;
+  border-left: 4px solid var(--neon-blue);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0 2.5rem 0;
+}
+
+#TOC h2,
+#TOC #toc-title {
+  color: var(--neon-blue);
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.75rem 0;
+  border: none;
+}
+
+#TOC ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+#TOC > ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem 2.5rem;
+  align-items: start;
+}
+
+#TOC > ul > li {
+  margin-bottom: 0;
+}
+
+@media (max-width: 650px) {
+  #TOC > ul {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+#TOC > ul > li > a {
+  color: var(--text-main);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+#TOC ul ul {
+  padding-left: 1.25rem;
+  margin-top: 0.35rem;
+  border-left: 1px solid #334155;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+#TOC a,
+#TOC a:visited {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 0.92rem;
+}
+
+#TOC a:hover {
+  color: var(--neon-blue);
+  text-decoration: underline;
+}
+
+
+/* Bottom "Back to Contents" button at the end of each section */
+.section-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin: 1.5rem 0 3rem 0;
+  padding-top: 0.75rem;
+  border-top: 1px dashed #1e293b;
+}
+
+.back-toc {
+  background-color: #0f172a;
+  color: var(--neon-blue);
+  border: 1px solid #1e293b;
+  border-radius: 6px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.back-toc:hover {
+  border-color: var(--neon-blue);
+  transform: translateY(-2px);
+}
+
+/* Floating Right-Side Nav (shows ONLY current section's subheadings) */
+#active-section-nav {
+  display: none;
+}
+
+@media (min-width: 1280px) {
+  #active-section-nav {
+    display: block;
+    position: fixed;
+    top: 3rem;
+    right: max(1.5rem, calc((100vw - 920px) / 2 - 240px));
+    width: 210px;
+    background-color: #0f172a;
+    border: 1px solid #1e293b;
+    border-left: 3px solid var(--neon-blue);
+    border-radius: 8px;
+    padding: 0.9rem 1rem;
+    z-index: 50;
+  }
+
+  #active-section-nav .side-title {
+    color: var(--neon-blue);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.6rem;
+  }
+
+  #active-section-nav a {
+    display: block;
+    color: #94a3b8;
+    font-size: 0.83rem;
+    line-height: 1.35;
+    text-decoration: none;
+    margin-bottom: 0.45rem;
+    transition: color 0.15s ease, transform 0.15s ease;
+  }
+
+  #active-section-nav a:hover {
+    color: var(--text-main);
+    transform: translateX(3px);
+  }
+}
+
+/* Match Quarto Book breadcrumb and search box to custom dark theme */
+.quarto-title-breadcrumbs .breadcrumb {
+  background-color: #0d1321 !important;
+  border: 1px solid #1e293b !important;
+  padding: 0.45rem 0.85rem !important;
+  border-radius: 8px !important;
+}
+
+#quarto-search .aa-Input {
+  background-color: #111827 !important;
+  color: #f8fafc !important;
+}
+
+
+/* Clean Black-on-White Layout When Students Print or Save as PDF */
+@media print {
+  :root {
+    --bg-deep: #ffffff !important;
+    --bg-card: #f8fafc !important;
+    --text-main: #0f172a !important;
+    --text-muted: #1e293b !important;
+  }
+
+  /* Use body/p/li instead of * so block accent colors survive! */
+  body, p, li, h1, h2, h3 {
+    color: #0f172a !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  html, body {
+    background-color: #ffffff !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  main.content {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  #TOC,
+  .block-definition,
+  .block-theorem,
+  .block-example,
+  .block-solution,
+  .block-exercise,
+  .visual-wrapper {
+    background-color: #f8fafc !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+
+  /* Restore each block's signature border & title color on paper */
+  .block-definition, .block-definition strong { border-color: #10b981 !important; color: #059669 !important; }
+  .block-theorem, .block-theorem strong       { border-color: #3b82f6 !important; color: #2563eb !important; }
+  .block-example, .block-example strong       { border-color: #06b6d4 !important; color: #0891b2 !important; }
+  .block-exercise, .block-exercise strong     { border-color: #f59e0b !important; color: #d97706 !important; }
+  .block-attention, .block-attention strong   { border-color: #ef4444 !important; color: #dc2626 !important; }
+
+  /* Hide interactive buttons, book sidebars, and floating nav on paper */
+  #quarto-sidebar,
+  .quarto-secondary-nav,
+  #quarto-margin-sidebar,
+  #active-section-nav,
+  .section-footer,
+  .back-toc,
+  input[type="range"],
+  button {
+    display: none !important;
+  }
+
+  /* Make SVG diagrams print cleanly on white paper */
+  svg {
+    background-color: #ffffff !important;
+    border: 1px solid #94a3b8 !important;
+  }
+
+  /* Remove gradient completely when printing (Safari renders transparent gradients as black) */
+  .grid-2,
+  .grid-3,
+  .grid-2 *,
+  .grid-3 *,
+  ol,
+  ul,
+  li {
+    background: none !important;
+    background-color: transparent !important;
+    background-image: none !important;
+  }
+
+  /* Hide other sections when printing a single section */
+  .print-hide {
+    display: none !important;
+  }
+}
+
+

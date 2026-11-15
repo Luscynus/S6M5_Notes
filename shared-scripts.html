@@ -1,0 +1,96 @@
+<aside id="active-section-nav"></aside>
+
+<script>
+(function() {
+  const sections = [];
+  const h2List = Array.from(document.querySelectorAll("h2")).filter(h => !h.closest("#TOC"));
+
+  h2List.forEach((h2) => {
+    const wrapper = h2.closest("section.level2");
+    let subLinks = [];
+    let lastEl = h2;
+
+    if (wrapper) {
+      lastEl = wrapper.lastElementChild || h2;
+      subLinks = Array.from(wrapper.querySelectorAll("h3")).map(h3 => {
+        const sec3 = h3.closest("section.level3");
+        const id = h3.id || (sec3 && sec3.id);
+        return id ? { id, text: h3.textContent.trim() } : null;
+      }).filter(Boolean);
+    } else {
+      let el = h2.nextElementSibling;
+      while (el && el.tagName !== "H2" && el.tagName !== "H1") {
+        if (el.tagName === "H3" && el.id) {
+          subLinks.push({ id: el.id, text: el.textContent.trim() });
+        }
+        lastEl = el;
+        el = el.nextElementSibling;
+      }
+    }
+
+    const footer = document.createElement("div");
+    footer.className = "section-footer";
+
+    const backLink = document.createElement("a");
+    backLink.href = "#TOC";
+    backLink.className = "back-toc";
+    backLink.textContent = "↑ Back to Contents";
+
+    footer.appendChild(backLink);
+    lastEl.insertAdjacentElement("afterend", footer);
+
+    sections.push({ h2, subLinks });
+  });
+
+  const sideNav = document.getElementById("active-section-nav");
+
+  function updateSideNav() {
+    if (!sections.length) {
+      sideNav.style.display = "none";
+      return;
+    }
+
+    if (sections.at(0).h2.getBoundingClientRect().top > 260) {
+      sideNav.style.opacity = "0";
+      sideNav.style.pointerEvents = "none";
+      return;
+    }
+
+    let current = sections.at(0);
+    const atBottom = (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 40);
+
+    if (atBottom) {
+      current = sections.at(-1);
+    } else {
+      for (const sec of sections) {
+        if (sec.h2.getBoundingClientRect().top <= 260) {
+          current = sec;
+        }
+      }
+    }
+
+    if (current.subLinks.length) {
+      const items = current.subLinks
+        .map(l => '<a href="#' + l.id + '">' + l.text + '</a>')
+        .join("");
+
+      sideNav.innerHTML =
+        '<div class="side-title">In This Section</div>' +
+        items +
+        '<div style="margin-top:0.6rem; padding-top:0.5rem; border-top:1px solid #1e293b;">' +
+        '<a href="#TOC" style="color:var(--neon-blue); font-weight:600; margin:0;">↑ Chapter Contents</a>' +
+        '</div>';
+
+      sideNav.style.display = "block";
+      sideNav.style.opacity = "1";
+      sideNav.style.pointerEvents = "auto";
+    } else {
+      sideNav.style.opacity = "0";
+      sideNav.style.pointerEvents = "none";
+    }
+  }
+
+  window.addEventListener("scroll", updateSideNav, { passive: true });
+  updateSideNav();
+})();
+</script>

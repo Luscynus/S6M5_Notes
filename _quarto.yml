@@ -1,0 +1,36 @@
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "Mathematics — S6M5"
+  subtitle: "Interactive Course Notes"
+  search: true
+  sidebar:
+    style: docked
+    background: "#0d1321"
+  chapters:
+    - index.qmd
+    - part: "Part I: Algebra & Analysis"
+      chapters:
+        - 1_Algebra/ch2_Analysis.qmd
+    - part: "Part II: Geometry"
+      chapters:
+        - 2_Geometry/ch1_GeometryIntro.qmd
+    - part: "Part III: Stochastics"
+      chapters:
+        - 3_Stochastics/ch1_StochasticsIntro.qmd
+
+format:
+  html:
+    theme: darkly
+    html-math-method: mathjax
+    toc: true
+    toc-depth: 2
+    toc-location: body
+    toc-title: "Chapter Contents"
+    number-sections: false
+    css: style.css
+    include-in-header: shared-header.html
+    include-after-body: shared-scripts.html
+
