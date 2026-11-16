@@ -162,7 +162,7 @@ $$
 ### Practice
 
 ::: {.block-exercise}
-<span class="block-label" style="color: var(--neon-amber);">Exercise 1</span>
+**Exercise 1**
 
 Use the algebraic domain rules to find the exact domain $\mathcal{D}_f$ for each of the given functions. Write your final answers using interval notation.
 
@@ -174,10 +174,26 @@ Use the algebraic domain rules to find the exact domain $\mathcal{D}_f$ for each
 5. $f(x) = \dfrac{7}{\sqrt{6 - 2x}}$
 6. $f(x) = \sqrt{x+1} + \sqrt{4-x}$
 :::
+
+<details style="margin-top: 0.9rem; padding-top: 0.6rem; border-top: 1px dashed rgba(245, 158, 11, 0.35);">
+<summary style="cursor: pointer; color: var(--neon-amber); font-weight: 600; font-size: 0.92rem; user-select: none;">
+  Check Final Answers
+</summary>
+
+::: {.grid-2 style="margin-top: 0.6rem; font-size: 0.95rem;"}
+1. $\mathcal{D}_f = (-\infty, 4) \cup (4, +\infty)$
+2. $\mathcal{D}_f = [-4, +\infty)$
+3. $\mathcal{D}_f = [2, 5) \cup (5, +\infty)$
+4. $\mathcal{D}_f = (-\infty, -3) \cup (-3, 3) \cup (3, +\infty)$
+5. $\mathcal{D}_f = (-\infty, 3)$
+6. $\mathcal{D}_f = [-1, 4]$
+:::
+</details>
 :::
 
+
 ::: {.block-exercise}
-<span class="block-label" style="color: var(--neon-amber);">Exercise 2</span>
+**Exercise 2**
 
 Find the coordinates of the vertex (turning point) for each quadratic function, state whether it is a minimum or maximum point, and write down its final range $\mathcal{R}_f$.
 

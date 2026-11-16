@@ -652,6 +652,10 @@ strong {
     margin-bottom: 12px; 
 }
 
+.block-exercise strong {
+  color: var(--neon-amber) !important;
+}
+
 .block-exercise p {
     font-size: 0.85rem !important;
     margin-top: 0 !important;

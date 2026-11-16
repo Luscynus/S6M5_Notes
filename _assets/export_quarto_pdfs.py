@@ -23,7 +23,7 @@ def build_subject_pdfs(book_dir="_book", target_base=None):
         page = browser.new_page()
 
         for folder, master_pdf_name in SUBJECTS.items():
-            html_files = sorted(glob.glob(os.path.join(book_dir, folder, "*.html")))
+            html_files = sorted(glob.glob(os.path.join(book_dir, folder, "*", "*.html")))
             if not html_files:
                 continue
 

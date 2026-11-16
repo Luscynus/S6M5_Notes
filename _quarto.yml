@@ -13,7 +13,7 @@ book:
     - index.qmd
     - part: "Part I: Algebra & Analysis"
       chapters:
-        - 1_Algebra/ch2_Analysis.qmd
+        - 1_Algebra/2_Analysis_Foundation/ch2_Analysis.qmd
     - part: "Part II: Geometry"
       chapters:
         - 2_Geometry/ch1_GeometryIntro.qmd

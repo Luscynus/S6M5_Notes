@@ -1,0 +1,4 @@
+# Analysis Foundations
+
+{{< include sections/s1_AnalysisFunctions.qmd >}}
+{{< include sections/s2_Test.qmd >}}
